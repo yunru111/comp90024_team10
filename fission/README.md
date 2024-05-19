@@ -237,7 +237,7 @@ using the following command instead:
 ```shell
 (
   cd fission
-  fission env create --name python --builder fission/python-builder-3.9 --image fission/python-env-3.9
+  fission env create --name python39 --builder fission/python-builder-3.9 --image fission/python-env-3.9
   fission env create --spec --name nodejs --image fission/node-env --builder fission/node-builder
 )  
 ```
@@ -404,6 +404,35 @@ Let's create the function (`avgtemp.js`) and related package specs:
 Let's apply the specs to the cluster:
 ```shell
 fission spec apply --specdir fission/specs --wait
+```
+
+
+### Customisation of a Fission environment
+
+Build the docker image (USER has to be the name of your account on DockerHub, and VERSION has to be changed every time the image is updated):
+```shell
+(
+  cd fission/python39x
+  VERSION='1.0.0'
+  USER='lmorandini'
+  docker build --network host --tag ${USER}/python39x:${VERSION} --build-arg PY_BASE_IMG=3.9-alpine .
+  docker push ${USER}/python39x:${VERSION}
+)
+``` 
+
+Create a Fission env from the custom image:
+```shell
+fission env create --name python39x --image lmorandini/python39x:1.0.0 --builder fission/python-builder-3.9
+```
+
+Create a Fission function that prints the veraiona of ElasticSearch, NumPy, and Scipy:
+```shell
+fission function create --name python39x --env python39x --code ./fission/functions/python39x.py
+```
+
+Test it:
+```shell
+fission function test --name python39x
 ```
 
 ## Development of an Event-driven architecture with Fission
@@ -642,9 +671,7 @@ Now Kibana can be used to test search queries or to have a look at the data.
 
 #### ReSTful API test
 
-date +"%Y-%m-%d"
-
-These requests return thelp same results because there is only one station in the data:
+These requests return the same results because there is only one station in the data:
 ```shell
 curl "http://localhost:9090/temperature/days/$(date +"%Y-%m-%d")" | jq '.'
 curl "http://localhost:9090/temperature/days/$(date +"%Y-%m-%d")/stations/95936" | jq '.'
