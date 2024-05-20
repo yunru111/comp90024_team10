@@ -323,3 +323,4 @@ cython_debug/
 /fission/functions/nodejs/
 /fission/functions/addobservations71/
 /fission/functions/fetchobservations/
+/fission/functions/healthx/

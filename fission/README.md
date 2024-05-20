@@ -9,6 +9,8 @@
 - ElasticSearch is installed (see [here](../installation/README.md#elasticsearch))
 - Fission CLI is installed on the client (see [here](../installation/README.md#fission-client))
 - Fission is installed on the cluster (see [here](../installation/README.md#fission))
+- Docker 24.x installed on your laptop (optional, only if you want to build a custom Fission environment
+- [DockerHub account](https://hub.docker.com/)  (optional, only if you want to build a custom Fission environment
 
 > Note: the code used here is for didactic purposes only. It has no error handling, no testing, and is not production-ready.
 
@@ -407,25 +409,25 @@ fission spec apply --specdir fission/specs --wait
 ```
 
 
-### Customisation of a Fission environment
+## Customisation of a Fission environment
 
-Build the docker image (USER has to be the name of your account on DockerHub, and VERSION has to be changed every time the image is updated):
-```shell
-(
-  cd fission/python39x
-  VERSION='1.0.0'
-  USER='lmorandini'
-  docker build --network host --tag ${USER}/python39x:${VERSION} --build-arg PY_BASE_IMG=3.9-alpine .
-  docker push ${USER}/python39x:${VERSION}
-)
-``` 
+A Fission env can be customised to avoid building packages with the same dependencies over and over again.
+The way of doing it is by creating a custom Docker image from the base Fission image and add the dependencies that
+are needed.
+
+
+### Use af a custom Fission environment
+
+On DockerHub there is already an image named `lmorandini/python39x` that has the ElasticSearch Python client, SciPy, and NumPy
+in it, which should satisfy most of the requirements needed for Assignment 2. This image can be used as it is 
+by following these steps.
 
 Create a Fission env from the custom image:
 ```shell
 fission env create --name python39x --image lmorandini/python39x:1.0.0 --builder fission/python-builder-3.9
 ```
 
-Create a Fission function that prints the veraiona of ElasticSearch, NumPy, and Scipy:
+Create a Fission function that prints the version of ElasticSearch, NumPy, and Scipy:
 ```shell
 fission function create --name python39x --env python39x --code ./fission/functions/python39x.py
 ```
@@ -434,6 +436,35 @@ Test it:
 ```shell
 fission function test --name python39x
 ```
+
+
+### Building af a custom Fission environment
+
+If something more specific is needed, a custom Fission environment as to be built.
+First a Dockerfile that extends the base Fission image has to be created, for this Docker must be installed 
+on your laptop and you need a DockerHub account (see requirements at the beginning of this README).
+
+The files for the `lmorandini/python49x` Fission env image can be found in the `fission/python39x` directory.
+
+After changing the files to suit your needs, build the docker image. 
+USER has to be the name of your account on DockerHub, and VERSION has to be changed every time the image is updated and pushed on DockerHub,
+you can also change the image name:
+```shell
+(
+  cd fission/python39x
+  USER='lmorandini'
+  VERSION='1.0.0'
+  docker build --network host --tag ${USER}/python39x:${VERSION} --build-arg PY_BASE_IMG=3.9-alpine .
+)
+``` 
+
+Push the image once the build is successful (you have to be logged in to DockerHub to push):
+```shell
+docker push ${USER}/python39x:${VERSION}
+```
+
+Then create the env as specified in the paragraph above.
+
 
 ## Development of an Event-driven architecture with Fission
 
