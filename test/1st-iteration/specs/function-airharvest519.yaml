@@ -1,0 +1,52 @@
+include:
+- ./functions/airqualityharvest519/airqualityharvest519.py
+kind: ArchiveUploadSpec
+name: functions-airqualityharvest519-airqualityharvest519-py-OO5Z
+
+---
+apiVersion: fission.io/v1
+kind: Package
+metadata:
+  creationTimestamp: null
+  name: airharvest519-386ec47d-5f29-429b-8140-3a6f0037bc95
+spec:
+  deployment:
+    checksum: {}
+    type: url
+    url: archive://functions-airqualityharvest519-airqualityharvest519-py-OO5Z
+  environment:
+    name: python
+    namespace: ""
+  source:
+    checksum: {}
+status:
+  buildstatus: none
+  lastUpdateTimestamp: "2024-05-20T05:30:28Z"
+
+---
+apiVersion: fission.io/v1
+kind: Function
+metadata:
+  creationTimestamp: null
+  name: airharvest519
+spec:
+  InvokeStrategy:
+    ExecutionStrategy:
+      ExecutorType: poolmgr
+      MaxScale: 0
+      MinScale: 0
+      SpecializationTimeout: 120
+      TargetCPUPercent: 0
+    StrategyType: execution
+  concurrency: 500
+  environment:
+    name: python
+    namespace: ""
+  functionTimeout: 60
+  idletimeout: 120
+  package:
+    packageref:
+      name: airharvest519-386ec47d-5f29-429b-8140-3a6f0037bc95
+      namespace: ""
+  requestsPerPod: 1
+  resources: {}
