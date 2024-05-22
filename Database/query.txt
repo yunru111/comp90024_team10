@@ -1,0 +1,46 @@
+The quary of disease:
+# Query index "mean"
+    query1 = {
+        "size":10000,
+        "query": {
+            "exists": {
+                "field": "site_name"
+            }
+        }
+    }
+# Query index "lung_disease"
+    query2 = {
+        "size":10000,
+        "query": {
+            "exists": {
+                "field": "area_name"
+            }
+        }
+    }
+
+
+The quary of airquality everyday:
+    query = {
+        "query": {
+            "match_all": {
+            }
+        }
+    }
+
+The quary of epa data:
+query = {
+        "query": {
+            "term": {
+                "site_name.keyword": "Mildura"
+            }
+        }
+
+The quary of bom data:
+query = {
+        "query": {
+            "term": {
+                "site_name.keyword": "Mildura"
+            }
+        }
+    }
+    }

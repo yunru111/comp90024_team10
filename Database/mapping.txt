@@ -1,0 +1,31 @@
+curl -k -u elastic:elastic -X PUT "https://127.0.0.1:9200/new_airquality" -H 'Content-Type: application/json' -d'
+{
+  "settings": {
+    "index": {
+      "number_of_shards": 3,
+      "number_of_replicas": 1
+    }
+  },
+  "mappings": {
+    "properties": {
+      "geo": {
+        "type": "geo_point"
+      },
+      "ozone": {
+        "type": "float"
+      },
+      "pm10": {
+        "type": "float"
+      },
+      "pm2p5": {
+        "type": "float"
+      },
+      "site_name": {
+        "type": "keyword"
+      },
+      "time_stamp": {
+        "type": "date"
+      }
+    }
+  }
+}'
