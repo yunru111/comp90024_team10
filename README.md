@@ -163,7 +163,25 @@ where you need to save the data in path ./backend/data.json
 - Anaconda3 has been installed
 
 
-## scripts or folder
+## Folder
+
+1. Air Quality & Lung Diseases
+
+    - getdata_air_disease.py: Retrieve air quality data and data on people suffering from different lung diseases for the same site from ElasticSearch
+
+    - getdata_air_everyday.py: Retrieve daily average air quality data for the different sites from ElasticSearch
+
+    - data_analysis.ipynb: Call the functions in the above two scripts to get data for data visualization
+
+2. Wind Speed & Air Quality
+
+    - get_bom_data.py: Retrieve wind speed data for a certain site during a short time period from ElasticSearch
+
+    - get_epa_data.py: Retrieve PM2.5 concentration data for a certain site during a short time period from ElasticSearch
+
+    - scenario2.ipynb: Call the functions in the above two scripts to get data for data visualization
+
+
 
 
 ## Running
